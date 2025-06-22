@@ -4,6 +4,8 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
+    "preDeployCommand": ["./migrate", "up"],
+    "startCommand": "./server",
     "restartPolicyType": "always"
   }
 }
