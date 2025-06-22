@@ -17,8 +17,19 @@ services:
       timeout: 5s
       retries: 5
 
+  migrate:
+    build: .
+    container_name: black-pages-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/black_pages?sslmode=disable
+    command: ["./migrate", "up"]
+    restart: "no"
+
   app:
-    build: ./backend
+    build: .
     container_name: black-pages-app
     ports:
       - "8080:8080"
@@ -29,6 +40,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - ./uploads:/app/uploads
 
 volumes:
   postgres_data:
