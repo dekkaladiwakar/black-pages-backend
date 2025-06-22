@@ -35,9 +35,13 @@ func main() {
 
 	// Setup CORS
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} // Next.js default port
+	config.AllowOrigins = []string{
+		"http://localhost:3000",                    // Local development
+		"https://blackpages.up.railway.app",       // Railway production
+	}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	config.AllowCredentials = true // Allow credentials for auth headers
 	router.Use(cors.New(config))
 
 	// Health check endpoint
